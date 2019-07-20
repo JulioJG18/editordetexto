@@ -1,0 +1,256 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" lang="es-es">
+
+
+
+<style>
+
+.opciones {
+
+width: 720px;
+
+border: 2px #000000 solid;
+
+background-color: black;
+
+}
+
+
+
+#textBox {
+
+width: 700px;
+
+height: 500px;
+
+border: 2px #000000 solid;
+
+padding: 10px;
+
+overflow: scroll;
+
+background-color: white;
+
+}
+
+</style>
+
+
+
+<script>
+
+function formatoFuente(sCmd, sValue) {
+
+document.execCommand(sCmd, false, sValue);
+
+}
+
+
+
+function processFiles(files) {
+
+var file = files[0];
+
+
+
+var reader = new FileReader();
+
+
+
+reader.onload = function (e) {
+
+// Cuando se dispara este evento, los datos están disponibles.
+
+// Los copiamos al <div> textBox de la página.
+
+var output = document.getElementById("textBox");
+
+output.innerHTML = e.target.result;
+
+};
+
+reader.readAsText(file);
+
+}
+
+
+
+// ---------------------------------------
+
+
+
+var dropBox;
+
+
+
+window.onload = function() {
+
+dropBox = document.getElementById("textBox");
+
+dropBox.ondragenter = ignoreDrag;
+
+dropBox.ondragover = ignoreDrag;
+
+dropBox.ondrop = drop;
+
+}
+
+
+
+function ignoreDrag(e) {
+
+e.stopPropagation();
+
+e.preventDefault();
+
+}
+
+
+
+function drop(e) {
+
+e.stopPropagation();
+
+e.preventDefault();
+
+
+
+var data = e.dataTransfer;
+
+var files = data.files;
+
+
+
+processFiles(files);
+
+}
+
+
+
+// ----------------------------------------
+
+
+
+function saveData() {
+
+var localData = document.getElementById("textBox").innerHTML;
+
+
+
+localStorage["lData"] = localData;
+
+alert(localData);
+
+}
+
+
+
+function loadData() {
+
+var localData = localStorage["lData"]; 
+
+
+
+if (localData != null) {
+
+document.getElementById("textBox").innerHTML = localData;
+
+}
+
+}
+
+
+
+</script>
+
+
+
+</head>
+
+<body>
+
+<section class="opciones">
+
+<button onclick="document.execCommand('bold',false,'');">Negrita</button>
+
+<button onclick="document.execCommand('italic',false,'');">Cursiva</button>
+
+<button onclick="document.execCommand('underline',false,'');">Subrayado</button>
+
+
+<select onchange="formatoFuente('forecolor',this[this.selectedIndex].value);this.selectedIndex=0;">
+
+<option class="heading" selected>Color</option>
+
+<option value="red">Rojo</option>
+
+<option value="blue">Azul</option>
+
+<option value="green">Verde</option>
+
+<option value="black">Negro</option>
+
+<option value="pink">Rosado</option>
+
+<option value="gold">Dorado</option>
+
+<option value="orange">Naranja</option>
+
+</select>
+
+</section>
+
+<section class="opciones">
+
+
+<button onclick="document.execCommand('justifyleft',false,'');">Izqda.</button>
+
+<button onclick="document.execCommand('justifycenter',false,'');">Centro</button>
+
+<button onclick="document.execCommand('justifyright',false,'');">Drcha.</button>
+
+<button onclick="document.execCommand('cut',false,'');">Cortar</button>
+
+<button onclick="document.execCommand('copy',false,'');">Copiar</button>
+
+<button onclick="document.execCommand('paste',false,'');">Pegar</button>
+
+<select onchange="formatoFuente('fontsize',this[this.selectedIndex].value);this.selectedIndex=0;">
+
+<option class="heading" selected>Fuente</option>
+
+<option value="1">Mini</option>
+
+<option value="2">Pequeña</option>
+
+<option value="3">Normal</option>
+
+<option value="4">Media</option>
+
+<option value="5">Grande</option>
+
+<option value="10">Enorme</option>
+
+</select>
+
+</section>
+
+
+
+<div id="textBox" contenteditable="true">
+
+
+<p>ingresa texto</p> 
+
+</div>
+
+
+</body>
+
+</html>
